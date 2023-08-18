@@ -1,0 +1,7 @@
+pytube
+Flask
+torch 
+torchvision 
+torchaudio
+easyocr
+python-docx

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YouTube Video Downloader</title>
+    <script>
+        function submitForm() {
+            var form = document.getElementById('downloadForm');
+            var progressBar = document.getElementById('progressBar');
+
+            // Disable the form and show the progress bar
+            form.style.display = 'none';
+            progressBar.style.display = 'block';
+
+            // Send the form data asynchronously
+            var xhr = new XMLHttpRequest();
+            xhr.open(form.method, form.action);
+
+            xhr.upload.onprogress = function(event) {
+                if (event.lengthComputable) {
+                    var percentComplete = (event.loaded / event.total) * 100;
+                    progressBar.value = percentComplete;
+                }
+            };
+
+            xhr.onload = function() {
+                progressBar.style.display = 'none';
+                if (xhr.status === 200) {
+                    // Download complete, show success message or redirect to download link
+                    alert('Download completed!');
+                } else {
+                    // Error occurred during download, show error message
+                    alert('Error occurred during download.');
+                }
+                form.reset();
+                form.style.display = 'block';
+            };
+
+            xhr.send(new FormData(form));
+        }
+    </script>
+    <style>
+        #progressBar {
+            display: none;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>YouTube Video Downloader</h1>
+
+    <form id="downloadForm" action="/download_progressive" method="post" onsubmit="event.preventDefault(); submitForm();">
+        <label for="url">YouTube Video URL:</label>
+        <input type="text" id="url" name="url" required>
+        <button type="submit">Download</button>
+    </form>
+
+    <progress id="progressBar" value="0" max="100"></progress>
+</body>
+</html>
